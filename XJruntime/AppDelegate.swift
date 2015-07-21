@@ -1,6 +1,6 @@
 //
 //  AppDelegate.swift
-//  XJruntime
+//  字典转模型
 //
 //  Created by 若水三千 on 15/7/21.
 //  Copyright (c) 2015年 若水三千. All rights reserved.

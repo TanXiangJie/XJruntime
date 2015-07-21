@@ -13,6 +13,11 @@
 		871C2F461B5E5BFB001D9A09 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 871C2F451B5E5BFB001D9A09 /* Images.xcassets */; };
 		871C2F491B5E5BFB001D9A09 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 871C2F471B5E5BFB001D9A09 /* LaunchScreen.xib */; };
 		871C2F551B5E5BFB001D9A09 /* XJruntimeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 871C2F541B5E5BFB001D9A09 /* XJruntimeTests.swift */; };
+		871C2F631B5E5C61001D9A09 /* photos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 871C2F5E1B5E5C61001D9A09 /* photos.swift */; };
+		871C2F641B5E5C61001D9A09 /* status.plist in Resources */ = {isa = PBXBuildFile; fileRef = 871C2F5F1B5E5C61001D9A09 /* status.plist */; };
+		871C2F651B5E5C61001D9A09 /* StatusResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 871C2F601B5E5C61001D9A09 /* StatusResult.swift */; };
+		871C2F661B5E5C61001D9A09 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 871C2F611B5E5C61001D9A09 /* User.swift */; };
+		871C2F671B5E5C61001D9A09 /* XJRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 871C2F621B5E5C61001D9A09 /* XJRuntime.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +41,11 @@
 		871C2F4E1B5E5BFB001D9A09 /* XJruntimeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = XJruntimeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		871C2F531B5E5BFB001D9A09 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		871C2F541B5E5BFB001D9A09 /* XJruntimeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XJruntimeTests.swift; sourceTree = "<group>"; };
+		871C2F5E1B5E5C61001D9A09 /* photos.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = photos.swift; sourceTree = "<group>"; };
+		871C2F5F1B5E5C61001D9A09 /* status.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = status.plist; sourceTree = "<group>"; };
+		871C2F601B5E5C61001D9A09 /* StatusResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusResult.swift; sourceTree = "<group>"; };
+		871C2F611B5E5C61001D9A09 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		871C2F621B5E5C61001D9A09 /* XJRuntime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XJRuntime.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +87,10 @@
 		871C2F3B1B5E5BFA001D9A09 /* XJruntime */ = {
 			isa = PBXGroup;
 			children = (
+				871C2F5E1B5E5C61001D9A09 /* photos.swift */,
+				871C2F601B5E5C61001D9A09 /* StatusResult.swift */,
+				871C2F611B5E5C61001D9A09 /* User.swift */,
+				871C2F621B5E5C61001D9A09 /* XJRuntime.swift */,
 				871C2F3E1B5E5BFA001D9A09 /* AppDelegate.swift */,
 				871C2F401B5E5BFB001D9A09 /* ViewController.swift */,
 				871C2F421B5E5BFB001D9A09 /* Main.storyboard */,
@@ -90,6 +104,7 @@
 		871C2F3C1B5E5BFA001D9A09 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				871C2F5F1B5E5C61001D9A09 /* status.plist */,
 				871C2F3D1B5E5BFA001D9A09 /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -194,6 +209,7 @@
 			files = (
 				871C2F441B5E5BFB001D9A09 /* Main.storyboard in Resources */,
 				871C2F491B5E5BFB001D9A09 /* LaunchScreen.xib in Resources */,
+				871C2F641B5E5C61001D9A09 /* status.plist in Resources */,
 				871C2F461B5E5BFB001D9A09 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -212,7 +228,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				871C2F671B5E5C61001D9A09 /* XJRuntime.swift in Sources */,
+				871C2F651B5E5C61001D9A09 /* StatusResult.swift in Sources */,
 				871C2F411B5E5BFB001D9A09 /* ViewController.swift in Sources */,
+				871C2F631B5E5C61001D9A09 /* photos.swift in Sources */,
+				871C2F661B5E5C61001D9A09 /* User.swift in Sources */,
 				871C2F3F1B5E5BFA001D9A09 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

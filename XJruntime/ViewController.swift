@@ -1,25 +1,61 @@
 //
 //  ViewController.swift
-//  XJruntime
+//  字典转模型
 //
 //  Created by 若水三千 on 15/7/21.
 //  Copyright (c) 2015年 若水三千. All rights reserved.
 //
-
+// 目前功能不完善之处大家多多包含 毕竟我工作时间不长。swift也是花了10天学习的。多多包涵
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UITableViewController {
+    // 实例化一个可变的数组
+    var array1 = NSArray()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
+        self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "reuseIdentifier")
+        self.view.backgroundColor = UIColor.whiteColor()
+      
+        let filePath = NSBundle.mainBundle().pathForResource("status.plist", ofType: nil)
+        
+        var dict = NSDictionary(contentsOfFile: filePath!)
+        // 取出statuses key 对应的数组
+        let statuses = "statuses"
+        
+        var  value: AnyObject? = dict!.objectForKey("statuses")
+//    字典数组转模型数组
+            array1 = StatusResult.objectArrayWithKeyValuesArray(value! as! [[String : AnyObject]])
+                    
+                
+        self.tableView.reloadData()
+        
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        
+        return array1.count
     }
+    
+    
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath) as! UITableViewCell
+        var row=indexPath.row as Int
+        var u:StatusResult = array1[row] as! StatusResult
+        
+        cell.textLabel?.text = u.user.name
+        cell.detailTextLabel?.text = u.user.profile_image_url
+        cell.detailTextLabel?.font = UIFont.systemFontOfSize(12)
+        cell.textLabel?.font = UIFont.systemFontOfSize(14)
+        
+        return cell
+    }
+    
 
-
+    //  cellHeight
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return 60
+    }
+    
 }
-
