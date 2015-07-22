@@ -9,9 +9,9 @@
 import UIKit
 
 class ViewController: UITableViewController {
-//    var array1 = NSArray()
+   var array1 = NSArray()
     
-    var array1 = NSMutableArray()
+//    var array1 = NSMutableArray()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,9 +19,9 @@ class ViewController: UITableViewController {
         self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "reuseIdentifier")
         self.view.backgroundColor = UIColor.whiteColor()
 //  通过plist 文件创建模型数组
-//       array1 = StatusResult.objectArrayWithFilename("status.plist")
-        var status:StatusResult =  StatusResult.objectWithFileName("status.plist")
-        array1.addObject(status)
+       array1 = StatusResult.objectArrayWithFilename("status.plist")
+//        var status:StatusResult =  StatusResult.objectWithFileName("status.plist")
+//        array1.addObject(status)
         self.tableView.reloadData()
         
     }
