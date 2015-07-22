@@ -5,8 +5,7 @@
 //  Created by 若水三千 on 15/7/16.
 //  Copyright (c) 2015年 若水三千. All rights reserved.
 //
-// 首先声明下我工作时间不长但是很热爱这个行业。有不足的地方希望大家指正。我多多请教swift我只研究了10天。专研追求是我的理想哈哈 1156203010 姓名谭向捷这个是我QQ有问题直接反馈18小时在线。多多完善 之前用惯MJExtention的还和他一样的用法。XCode6.4版 2.0我没有试过
-
+// 
 import UIKit
 
 let Prefix = "T@"
