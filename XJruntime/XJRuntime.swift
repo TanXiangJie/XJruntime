@@ -15,6 +15,7 @@ let temp = "."
 var CoustomPrefix:String?
 var Cla :AnyClass?
 let dicCls: AnyClass = NSDictionary.classForCoder()
+var arrayObj = NSArray()
 extension NSObject {
     
     
@@ -129,7 +130,9 @@ extension NSObject {
     
     class func objectArrayWithKeyValuesArray(keyValuesArray:[[String:AnyObject]])->NSArray{
         var modelArray = NSMutableArray()
+        
         var array = NSArray()
+        
         for dict in keyValuesArray{
             //   这里的做判断防止出错不会写了
             //            if keyValuesArray.isKindOfClass([[String:AnyObject]]){
@@ -145,4 +148,71 @@ extension NSObject {
         }
         return array
     }
+    
+    /// 通过plist来创建一个模型数组 @param file 文件全路径 @return 新建的对象 如果你的模型中有Number Int 8 32 64等 请写成String 预防类型安全
+    
+    class func objectArrayWithFilename(filename:String!)->NSArray{
+        
+        let filePath = NSBundle.mainBundle().pathForResource(filename, ofType: nil)
+        if filePath != nil {
+            var dict = NSDictionary(contentsOfFile: filePath!)
+            let statuses: AnyObject? = dict?.allKeys.first
+            
+            var  value: AnyObject? = dict!.objectForKey(statuses!)
+            
+            if value!.isKindOfClass(NSArray.classForCoder()){
+                if value != nil{
+                    arrayObj = objectArrayWithKeyValuesArray(value as! [[String : AnyObject]])
+                   
+                    return arrayObj
+                    
+                }
+                
+            }else{
+                if value != nil {
+                    println("Value 不是一个字典数组 请使用其他方法")
+                    
+                    return arrayObj
+                    
+                }
+            }
+            
+            
+        }
+        
+        println("文件路径不对，可能文件名有误请查证")
+        
+        return arrayObj
+        
+    }
+    
+    ///  通过plist来创建一个模型 @param filename 文件名(仅限于mainBundle中的文件)  @return 模型数组 如果你的模型中有Number Int 8 32 64等 请写成String 预防类型安全
+    
+        class func objectWithFileName(filename:String!)->Self{
+    
+            let filePath = NSBundle.mainBundle().pathForResource(filename, ofType: nil)
+            var dict = NSDictionary(contentsOfFile: filePath!)
+            
+            let statuses: AnyObject? = dict?.allKeys.first
+            
+            var  value: AnyObject? = dict!.objectForKey(statuses!)
+            var objc = self.alloc()
+            if  value != nil {
+            if value!.isKindOfClass(NSDictionary.classForCoder()){
+                
+                objc = objectWithKeyValues(value! as! NSDictionary)
+                
+                return objc
+            
+            }else{
+                
+                println("value 不是一个字典")
+  
+                }
+           
+             }
+             println("value 没有值")
+           
+            return objc
+        }
 }

@@ -9,26 +9,19 @@
 import UIKit
 
 class ViewController: UITableViewController {
-    // 实例化一个可变的数组
-    var array1 = NSArray()
+//    var array1 = NSArray()
+    
+    var array1 = NSMutableArray()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "reuseIdentifier")
         self.view.backgroundColor = UIColor.whiteColor()
-      
-        let filePath = NSBundle.mainBundle().pathForResource("status.plist", ofType: nil)
-        
-        var dict = NSDictionary(contentsOfFile: filePath!)
-        // 取出statuses key 对应的数组
-        let statuses = "statuses"
-        
-        var  value: AnyObject? = dict!.objectForKey("statuses")
-//    字典数组转模型数组
-            array1 = StatusResult.objectArrayWithKeyValuesArray(value! as! [[String : AnyObject]])
-                    
-                
+//  通过plist 文件创建模型数组
+//       array1 = StatusResult.objectArrayWithFilename("status.plist")
+        var status:StatusResult =  StatusResult.objectWithFileName("status.plist")
+        array1.addObject(status)
         self.tableView.reloadData()
         
     }
