@@ -83,7 +83,8 @@ extension NSObject {
                 }
                 
                 if value!.isKindOfClass(NSArray.classForCoder()){ //
-                    objc.setValue(valueObj, forKeyPath:keys as! String)
+                    
+                    objc.setValue(value!.allObjects, forKeyPath:keys as! String)
                     
                 }
                 
