@@ -15,6 +15,7 @@ var CoustomPrefix:String?
 var Cla :AnyClass?
 let dicCls: AnyClass = NSDictionary.classForCoder()
 var arrayObj = NSArray()
+var valueObj:String?
 extension NSObject {
     
     
@@ -69,26 +70,29 @@ extension NSObject {
                 let ArrayCls:AnyClass = NSArray.classForCoder()
                 
                 // swift 类型安全很重要 类型转换
-                var valueObj = String(format: "\(value!)")
-                
                 if value!.isKindOfClass(strCls) {//string
-                    
+                    valueObj = String(format: "\(value!)")
+
                     objc.setValue(valueObj, forKeyPath:keys as! String)
                     
                 }
                 
                 if  value!.isKindOfClass(Number){ // Number
-                    
+                    valueObj = String(format: "\(value!)")
+
                     objc.setValue(valueObj, forKeyPath:keys as! String)
                 }
                 
                 if value!.isKindOfClass(NSArray.classForCoder()){ //
-                    
+                    valueObj = String(format: "\(value!)")
+
                     objc.setValue(value!.allObjects, forKeyPath:keys as! String)
                     
                 }
                 
                 if value!.isKindOfClass(NSURL.classForCoder()){ // url
+                    valueObj = String(format: "\(value!)")
+
                     objc.setValue(valueObj, forKeyPath:keys as! String)
                     
                 }
