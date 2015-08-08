@@ -96,7 +96,6 @@ extension NSObject {
                     objc.setValue(valueObj, forKeyPath:keys as! String)
                     
                 }
-                
             }
             
         }
