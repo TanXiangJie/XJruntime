@@ -7,10 +7,8 @@
 //
 // 
 import UIKit
-var arrayObj = NSArray()
-var valueObj:String?
+
 extension NSObject {
-    
     
     /// 通过字典来创建一个模型  @param keyValues 字典 @return 新建的对象如果你的模型中有Number Int 8 32 64等 请写成String 预防类型安全
     class func objectWithKeyValues(Dict:NSDictionary)->Self{
@@ -56,7 +54,7 @@ extension NSObject {
                }
             
             if value != nil{
-
+                var valueObj:String?
                 // swift 类型安全很重要 类型转换
                 if value!.isKindOfClass(NSString.classForCoder()) {//string
                     valueObj = String(format: "\(value!)")
@@ -145,15 +143,15 @@ extension NSObject {
             var  value: AnyObject? = dict!.objectForKey(dict!.allKeys.first!)
          
             if value == nil  {return nil}
-            
+            var arrayObj = NSArray()
             if value!.isKindOfClass(NSArray.classForCoder()){
                 
-                    arrayObj = objectArrayWithKeyValuesArray(value as!
+               arrayObj = objectArrayWithKeyValuesArray(value as!
                         [[String : AnyObject]])
                 
             }else{
                 
-                    println("Value 不是一个字典数组 请使用其他方法")
+            println("Value 不是一个字典数组 请使用其他方法")
                 
             }
             return arrayObj
@@ -162,7 +160,7 @@ extension NSObject {
         
         println("文件路径不对，可能文件名有误请查证")
         
-        return arrayObj
+        return nil
         
     }
     
@@ -182,7 +180,6 @@ extension NSObject {
                 
                 objc = objectWithKeyValues(value! as! NSDictionary)
                 
-            
             }else{
                 
                 println("value 不是一个字典")
