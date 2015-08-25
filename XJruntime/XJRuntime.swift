@@ -12,7 +12,6 @@ extension NSObject {
     /// 通过字典来创建一个模型  @param keyValues 字典 @return 新建的对象如果你的模型中有Number Int 8 32 64等 请写成String 预防类型安全
     class func objectWithKeyValues(Dict:NSDictionary)->Self{
         var objc = self.alloc()
-        
         var count:UInt32 = 0
         //        var ivars = class_copyIvarList(self.classForCoder(), &count)
         var properties = class_copyPropertyList(self.classForCoder(),&count)
@@ -29,43 +28,35 @@ extension NSObject {
             var value :AnyObject? = Dict[keys]
             var CoustomPrefix:String?
             = types.substringFromIndex("T@".lengthOfBytesUsingEncoding(NSUTF8StringEncoding))
-            
+            var CustomValueName:String?
             if !CoustomPrefix!.hasPrefix(","){
-                var CustomValueName = CoustomPrefix!.componentsSeparatedByString(",").first!
-                
-                //  自定义类型
-                if value != nil && value! is [String:AnyObject] {
+                CustomValueName = CoustomPrefix!.componentsSeparatedByString(",").first!
+            }
+            //  自定义类型
+            if value != nil{
+                if  value! is [String:AnyObject] {
                     // 根据类型字符串创建类
                     
-                    if swiftClassFromString(CustomValueName) != nil {
+                    if swiftClassFromString(CustomValueName!) != nil {
                         // 递归
                         var CustomValueObject: AnyObject =
-                        swiftClassFromString(CustomValueName).objectWithKeyValues(value as! [String:AnyObject])
+                        swiftClassFromString(CustomValueName!).objectWithKeyValues(value as! [String:AnyObject])
                         
                         objc.setValue(CustomValueObject, forKey: keys as String)
                     }
                     
-                }
-                
-            }
-            
-            if value != nil{
-                // swift 类型安全很重要 类型转换
-                if value! is [AnyObject]{
+                }else{
                     
-                    objc.setValue(value!.allObjects, forKeyPath:keys as! String)
-                }
-                if value! is String {
-                    
-                    objc.setValue(value!, forKeyPath:keys as! String)
+                    if value! is NSNumber {
+                        
+                        objc.setValue("\(value!)", forKeyPath:keys as! String)
+                        
+                    }else{
+                        objc.setValue(value!, forKeyPath:keys as! String)
+                        
+                    }
                     
                 }
-                
-                if value! is NSNumber {
-                    objc.setValue("\(value!)", forKeyPath:keys as! String)
-                    
-                }
-                //...如果有缺少的（不能满足你的使用）请在此添加
             }
             
         }
@@ -151,9 +142,9 @@ extension NSObject {
         
         var objc = self.alloc()
         
-        if value != nil && value! is NSDictionary{
+        if value != nil && value! is [String:AnyObject]{
             
-            objc = objectWithKeyValues(value! as! NSDictionary)
+            objc = objectWithKeyValues(value! as! [String:AnyObject])
             
         }else{
             
