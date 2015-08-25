@@ -7,7 +7,6 @@
 //
 //
 import UIKit
-var valueObj:String?
 extension NSObject {
     
     /// 通过字典来创建一个模型  @param keyValues 字典 @return 新建的对象如果你的模型中有Number Int 8 32 64等 请写成String 预防类型安全
