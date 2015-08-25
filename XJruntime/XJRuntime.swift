@@ -54,32 +54,27 @@ extension NSObject {
                }
             
             if value != nil{
-                var valueObj:String?
                 // swift 类型安全很重要 类型转换
                 if value!.isKindOfClass(NSString.classForCoder()) {//string
-                    valueObj = String(format: "\(value!)")
 
-                    objc.setValue(valueObj, forKeyPath:keys as! String)
+                    objc.setValue("\(value!)", forKeyPath:keys as! String)
                     
                 }
                 
                 if  value!.isKindOfClass(NSNumber.classForCoder()){ // Number
-                    valueObj = String(format: "\(value!)")
 
-                    objc.setValue(valueObj, forKeyPath:keys as! String)
+                    objc.setValue("\(value!)", forKeyPath:keys as! String)
                 }
                 
                 if value!.isKindOfClass(NSArray.classForCoder()){ //
-                    valueObj = String(format: "\(value!)")
 
                     objc.setValue(value!.allObjects, forKeyPath:keys as! String)
                     
                 }
                 
                 if value!.isKindOfClass(NSURL.classForCoder()){ // url
-                    valueObj = String(format: "\(value!)")
 
-                    objc.setValue(valueObj, forKeyPath:keys as! String)
+                    objc.setValue("\(value!)", forKeyPath:keys as! String)
                     
                 }
             }
