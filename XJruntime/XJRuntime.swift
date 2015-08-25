@@ -7,13 +7,6 @@
 //
 // 
 import UIKit
-
-let Prefix = "T@"
-let Prefix1 = ","
-let temp = "."
-var CoustomPrefix:String?
-var Cla :AnyClass?
-let dicCls: AnyClass = NSDictionary.classForCoder()
 var arrayObj = NSArray()
 var valueObj:String?
 extension NSObject {
@@ -38,46 +31,41 @@ extension NSObject {
             
             var value :AnyObject? = Dict[keys]
             
-            CoustomPrefix = (types as NSString).substringFromIndex(Prefix.lengthOfBytesUsingEncoding(NSUTF8StringEncoding))
-            
-            if !CoustomPrefix!.hasPrefix(Prefix1){
-                var CustomValueName:String? = CoustomPrefix!.componentsSeparatedByString(Prefix1).first!
-                
-                if  value != nil{
-                    //  自定义类型
-                    if   value!.isKindOfClass(dicCls) { // Dic
+            var CoustomPrefix:String?
+            = types.substringFromIndex("T@".lengthOfBytesUsingEncoding(NSUTF8StringEncoding))
+
+            if !CoustomPrefix!.hasPrefix(","){
+                var CustomValueName:String? = CoustomPrefix!.componentsSeparatedByString(",").first!
+              
+             //  自定义类型
+              if value != nil && value!.isKindOfClass(NSDictionary.classForCoder()) { // Dic
                         
                         // 根据类型字符串创建类
-                        Cla = swiftClassFromString(CustomValueName!)
-                        
-                        if Cla != nil {
+                
+                        if swiftClassFromString(CustomValueName!) != nil {
+                          // 递归
+                            var CustomValueObject: AnyObject =
+                            swiftClassFromString(CustomValueName!).objectWithKeyValues(value as! NSDictionary)
                             
-                            //  将转换后的类作为Value
-                            var CustomValueObject: AnyObject = Cla!.objectWithKeyValues(value as! NSDictionary)
                             objc.setValue(CustomValueObject, forKey: keys as String)
                             
                         }
                         
                     }
-                    
-                }
-                
-            }
+
+               }
+            
             if value != nil{
-                
-                let strCls:AnyClass = NSString.classForCoder()
-                let Number:AnyClass = NSNumber.classForCoder()
-                let ArrayCls:AnyClass = NSArray.classForCoder()
-                
+
                 // swift 类型安全很重要 类型转换
-                if value!.isKindOfClass(strCls) {//string
+                if value!.isKindOfClass(NSString.classForCoder()) {//string
                     valueObj = String(format: "\(value!)")
 
                     objc.setValue(valueObj, forKeyPath:keys as! String)
                     
                 }
                 
-                if  value!.isKindOfClass(Number){ // Number
+                if  value!.isKindOfClass(NSNumber.classForCoder()){ // Number
                     valueObj = String(format: "\(value!)")
 
                     objc.setValue(valueObj, forKeyPath:keys as! String)
@@ -113,11 +101,11 @@ extension NSObject {
             let typeStr = "\""
             if className.hasPrefix(typeStr){
                 
-                // "\"User1\""
+                // "\"User\""
                 var rang = (className as NSString).substringFromIndex(typeStr.lengthOfBytesUsingEncoding(NSUTF8StringEncoding))
                 // 类型字符串截取
                 var length = rang.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)
-                // User1\""
+                // User\""
                 rang = (rang as NSString).substringToIndex(length.hashValue-1)
                 return NSClassFromString("\(appName).\(rang)")
                 
@@ -137,15 +125,8 @@ extension NSObject {
         var array = NSArray()
         
         for dict in keyValuesArray{
-            //   这里的做判断防止出错不会写了
-            //            if keyValuesArray.isKindOfClass([[String:AnyObject]]){
             
-            var model:AnyObject = objectWithKeyValues(dict)
-            modelArray.addObject(model)
-            
-            //        }else{
-            //        打印提示信息可能不是一个字典数组
-            //        }
+            modelArray.addObject(objectWithKeyValues(dict))
             
             array = modelArray
         }
@@ -154,32 +135,28 @@ extension NSObject {
     
     /// 通过plist来创建一个模型数组 @param file 文件全路径 @return 新建的对象 如果你的模型中有Number Int 8 32 64等 请写成String 预防类型安全
     
-    class func objectArrayWithFilename(filename:String!)->NSArray{
+    class func objectArrayWithFilename(filename:String!)->NSArray?{
         
         let filePath = NSBundle.mainBundle().pathForResource(filename, ofType: nil)
+        
         if filePath != nil {
-            var dict = NSDictionary(contentsOfFile: filePath!)
-            let statuses: AnyObject? = dict?.allKeys.first
             
-            var  value: AnyObject? = dict!.objectForKey(statuses!)
+            var dict = NSDictionary(contentsOfFile: filePath!)
+            var  value: AnyObject? = dict!.objectForKey(dict!.allKeys.first!)
+         
+            if value == nil  {return nil}
             
             if value!.isKindOfClass(NSArray.classForCoder()){
-                if value != nil{
-                    arrayObj = objectArrayWithKeyValuesArray(value as! [[String : AnyObject]])
-                   
-                    return arrayObj
-                    
-                }
+                
+                    arrayObj = objectArrayWithKeyValuesArray(value as!
+                        [[String : AnyObject]])
                 
             }else{
-                if value != nil {
+                
                     println("Value 不是一个字典数组 请使用其他方法")
-                    
-                    return arrayObj
-                    
-                }
+                
             }
-            
+            return arrayObj
             
         }
         
@@ -194,18 +171,17 @@ extension NSObject {
         class func objectWithFileName(filename:String!)->Self{
     
             let filePath = NSBundle.mainBundle().pathForResource(filename, ofType: nil)
+            
             var dict = NSDictionary(contentsOfFile: filePath!)
             
-            let statuses: AnyObject? = dict?.allKeys.first
+            var  value: AnyObject? = dict!.objectForKey(dict!.allKeys.first!)
             
-            var  value: AnyObject? = dict!.objectForKey(statuses!)
             var objc = self.alloc()
-            if  value != nil {
-            if value!.isKindOfClass(NSDictionary.classForCoder()){
+            
+            if value != nil && value!.isKindOfClass(NSDictionary.classForCoder()){
                 
                 objc = objectWithKeyValues(value! as! NSDictionary)
                 
-                return objc
             
             }else{
                 
@@ -213,8 +189,6 @@ extension NSObject {
   
                 }
            
-             }
-             println("value 没有值")
            
             return objc
         }

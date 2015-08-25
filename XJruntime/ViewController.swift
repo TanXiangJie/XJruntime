@@ -9,33 +9,30 @@
 import UIKit
 
 class ViewController: UITableViewController {
-   var array1 = NSArray()
-    
-//    var array1 = NSMutableArray()
-
+   var array = NSArray()
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "reuseIdentifier")
         self.view.backgroundColor = UIColor.whiteColor()
+        
 //  通过plist 文件创建模型数组
-       array1 = StatusResult.objectArrayWithFilename("status.plist")
-//        var status:StatusResult =  StatusResult.objectWithFileName("status.plist")
-//        array1.addObject(status)
+       array = StatusResult.objectArrayWithFilename("status.plist")!
+
         self.tableView.reloadData()
         
     }
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         
-        return array1.count
+        return array.count
     }
     
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath) as! UITableViewCell
         var row=indexPath.row as Int
-        var u:StatusResult = array1[row] as! StatusResult
+        var u:StatusResult = array[row] as! StatusResult
         
         cell.textLabel?.text = u.user.name
         cell.detailTextLabel?.text = u.user.profile_image_url
