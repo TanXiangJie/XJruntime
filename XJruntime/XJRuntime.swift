@@ -60,7 +60,7 @@ extension NSObject {
             }
             
         }
-        
+        free(properties)
         return objc
         
     }
