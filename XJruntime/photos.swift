@@ -8,12 +8,12 @@
 //  Copyright (c) 2015年 若水三千. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
 class photos: NSObject {
     
-    var thumbnail_pic = String()
+    var thumbnail_pic : String?
     
-
-
+    
+    
 }

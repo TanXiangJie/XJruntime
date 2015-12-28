@@ -5,20 +5,19 @@
 //  Created by 若水三千 on 15/7/21.
 //  Copyright (c) 2015年 若水三千. All rights reserved.
 //
-// 目前功能不完善之处大家多多包含 毕竟我工作时间不长。swift也是花了10天学习的。多多包涵
 import UIKit
 
 class ViewController: UITableViewController {
-   var array = NSArray()
+    var array = NSArray()
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "reuseIdentifier")
         self.view.backgroundColor = UIColor.whiteColor()
         
-//  通过plist 文件创建模型数组
-       array = StatusResult.objectArrayWithFilename("status.plist")!
-
+        //  通过plist 文件创建模型数组
+        array = StatusResult.objectArrayWithFilename("status.plist")!
+        
         self.tableView.reloadData()
         
     }
@@ -30,19 +29,32 @@ class ViewController: UITableViewController {
     
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("reuseIdentifier", forIndexPath: indexPath) as! UITableViewCell
-        var row=indexPath.row as Int
-        var u:StatusResult = array[row] as! StatusResult
+        let identify:String = "SwiftCell"
         
-        cell.textLabel?.text = u.user.name
-        cell.detailTextLabel?.text = u.user.profile_image_url
+        //        var cell = tableView.dequeueReusableCellWithIdentifier(identify)! as! UITableViewCell
+        let row=indexPath.row as Int
+        let u:StatusResult = array[row] as! StatusResult
+        let cell = UITableViewCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier:identify)
+        
+        cell.textLabel?.text = u.user!.name
+        cell.detailTextLabel?.text = u.user!.profile_image_url
         cell.detailTextLabel?.font = UIFont.systemFontOfSize(12)
         cell.textLabel?.font = UIFont.systemFontOfSize(14)
+        let url: NSURL = NSURL(string: u.user!.profile_image_url!)!
+        let request: NSURLRequest = NSURLRequest(URL: url)
         
+        NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue(), completionHandler:{
+            (response, data, error) -> Void in
+            
+            if ((error) != nil) {
+                //Handle Error here
+            }else{
+                cell.imageView?.image = UIImage(data: data!)
+            }
+            
+        })
         return cell
     }
-    
-
     //  cellHeight
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return 60
