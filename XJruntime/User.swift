@@ -6,7 +6,7 @@
 //  Copyright (c) 2015年 若水三千. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 class User: NSObject {
     
@@ -28,32 +28,31 @@ class User: NSObject {
     //            gender	string	性别，m：男、f：女、n：未知
     //            followers_count	int	粉丝数
     //            friends_count	int	关注数
-    var id  : String?
-    var screen_name : String?
-    var name  : String?
-    var province  : String?
-    var city  : String?
-    var location  : String?
+    var id = String()
+    var screen_name = String()
+    var name = String()
+    var province = String()
+    var city = String()
+    var location = String()
     
-    var url  : String?
-    var profile_image_url :String?
-    
-    var profile_url  : String?
-    var domain  : String?
-    var weihao  : String?
-    var gender  : String?
-    var followers_count  : String?
-    var friends_count  : String?
-    var statuses_count  : String?
-    var favourites_count  : String?
-    var avatar_hd  : String?
-    var follow_me  : String?
-    var online_status  : String?
-    var bi_followers_count  : String?
-    var remark  : String?
-    var status  : String?
-    var allow_all_comment  : String?
-    var allow_all_act_msg  : String?
+    var url = String()
+    var profile_image_url = String()
+    var profile_url = String()
+    var domain = String()
+    var weihao = String()
+    var gender = String()
+    var followers_count = String()
+    var friends_count = String()
+    var statuses_count = String()
+    var favourites_count = String()
+    var avatar_hd = String()
+    var follow_me = String()
+    var online_status = String()
+    var bi_followers_count = String()
+    var remark = String()
+    var status = String()
+    var allow_all_comment = String()
+    var allow_all_act_msg = String()
     
     
     //            statuses_count	int	微博数
@@ -71,5 +70,5 @@ class User: NSObject {
     //            online_status	int	用户的在线状态，0：不在线、1：在线
     //            bi_followers_count	int	用户的互粉数
     
-    
+ 
 }
