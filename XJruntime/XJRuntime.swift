@@ -6,110 +6,93 @@
 //  Copyright (c) 2015年 若水三千. All rights reserved.
 //
 //
-import UIKit
+import Foundation
 extension NSObject {
     
-    /// 通过字典来创建一个模型  @param keyValues 字典 @return 新建的对象如果你的模型中有Number Int 8 32 64等 请写成String 预防类型安全
-    class func objectWithKeyValues(Dict:NSDictionary)->Self{
-        var objc = self.alloc()
+    /// 通过字典来创建一个模型  @param keyValues 字典
+    class func objectWithKeyValues(dict:[String: AnyObject])->Self{
+        let objc = self.init(initialize())
+        
         var count:UInt32 = 0
-        //        var ivars = class_copyIvarList(self.classForCoder(), &count)
-        var properties = class_copyPropertyList(self.classForCoder(),&count)
+        
+        let ivars = class_copyIvarList(self.classForCoder(), &count)
+        
+        let properties = class_copyPropertyList(self.classForCoder(), &count)
         
         for var i = 0; i < Int(count); ++i{
-            //var ivar :Ivar = ivars[i]
             
-            var propert : objc_property_t  = properties[i];
+            let ivar :Ivar = ivars[i]
             
-            var keys : NSString = NSString(CString: property_getName(propert), encoding: NSUTF8StringEncoding)!
+            let property : objc_property_t  = properties[i];
             
-            var types : NSString = NSString(CString: property_getAttributes(propert), encoding: NSUTF8StringEncoding)!
-            
-            var value :AnyObject? = Dict[keys]
-            var CoustomPrefix:String?
-            = types.substringFromIndex("T@".lengthOfBytesUsingEncoding(NSUTF8StringEncoding))
-            var CustomValueName:String?
-            if !CoustomPrefix!.hasPrefix(","){
-                CustomValueName = CoustomPrefix!.componentsSeparatedByString(",").first!
-            }
-            //  自定义类型
-            if value != nil{
-                if  value! is [String:AnyObject] {
-                    // 根据类型字符串创建类
-                    
-                    if swiftClassFromString(CustomValueName!) != nil {
-                        // 递归
-                        var CustomValueObject: AnyObject =
-                        swiftClassFromString(CustomValueName!).objectWithKeyValues(value as! [String:AnyObject])
+            let keys = ivar_getName(ivar)
+            //      ivar_getTypeEncoding 主要是这个不会拿到任何东西 只能用了 objc_property_t
+            if let varName = String.fromCString(keys) {
+                let types : NSString = NSString(CString: property_getAttributes(property), encoding: NSUTF8StringEncoding)!
+                let CoustomPrefix:String  = types.substringFromIndex("T@".lengthOfBytesUsingEncoding(NSUTF8StringEncoding))
+                let CustomValueName:String = CoustomPrefix.componentsSeparatedByString(",").first!
+                
+                let Attributes=(CustomValueName as NSString).substringWithRange(NSMakeRange(1,CustomValueName.characters.count-2))
+                print(Attributes);
+                let value = dict[varName]
+                
+                if Attributes.hasPrefix("_TtC9"){ // 自定义类
+                    if value is [String:AnyObject]{
                         
-                        objc.setValue(CustomValueObject, forKey: keys as String)
+                        let  tempDic:AnyObject  = NSClassFromString(Attributes)!.objectWithKeyValues(value as! [String:AnyObject])
+                        objc.setValue(tempDic, forKeyPath:varName as String)
+                        
+                    }
+                    if(value is [String]){
+                        
+                        let tempArray =   NSClassFromString(Attributes)!.objectArrayWithKeyValuesArray(value as! [String])
+                        objc.setValue(tempArray, forKeyPath:varName as String)
+                        
                     }
                     
-                }else{
+                }else{ // 其他
                     
-                    if value! is NSNumber {
+                    if value is NSNumber {
                         
-                        objc.setValue("\(value!)", forKeyPath:keys as! String)
+                        objc.setValue("\(value)", forKeyPath:varName as String)
                         
-                    }else{
-                        objc.setValue(value!, forKeyPath:keys as! String)
+                    }else {
+                        objc.setValue( value, forKeyPath:varName as String)
                         
                     }
                     
                 }
+                
             }
             
         }
+        
+        free(ivars) // 释放内存
         free(properties)
         return objc
-        
     }
     
-    /// 得到自定义类型的类名 如果你的模型中有Number Int 8 32 64等 请写成String 预防类型安全
+    /// 通过字典数组来创建一个模型数组 @param keyValuesArray 字典数组 @return 模型数组
     
-    private  class func swiftClassFromString(className: String) -> AnyClass! {
-        
-        if  var appName: String = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleName") as! String? {
-            
-            if className.hasPrefix("\""){
-                
-                // "\"User\""
-                var rang = (className as NSString).substringFromIndex("\"".lengthOfBytesUsingEncoding(NSUTF8StringEncoding))
-                // 类型字符串截取
-                var length = rang.lengthOfBytesUsingEncoding(NSUTF8StringEncoding)
-                // User\""
-                rang = (rang as NSString).substringToIndex(length.hashValue-1)
-                return NSClassFromString("\(appName).\(rang)")
-                
-            }
-            
-        }
-        
-        return nil;
-        
-    }
-    
-    /// 通过字典数组来创建一个模型数组 @param keyValuesArray 字典数组 @return 模型数组 如果你的模型中有Number Int 8 32 64等 请写成String 预防类型安全
-    
-    class func objectArrayWithKeyValuesArray(keyValuesArray:[AnyObject])->[AnyObject]{
+    class func objectArrayWithKeyValuesArray(keyValuesArray:[AnyObject])->[AnyObject]?{
         var modelArray = [AnyObject]()
         for dict in keyValuesArray{
+            let model:AnyObject = objectWithKeyValues(dict as! [String:AnyObject])
             
-            var model:AnyObject = objectWithKeyValues(dict as! [String:AnyObject])
             modelArray.append(model)
         }
+        
         return modelArray
     }
-    /// 通过plist来创建一个模型数组 @param file 文件全路径 @return 新建的对象 如果你的模型中有Number Int 8 32 64等 请写成String 预防类型安全
-    
-    class func objectArrayWithFilename(filename:String!)->NSArray?{
+    /// 通过plist来创建一个模型数组 @param file 文件全路径 @return 新建的对象
+    class func objectArrayWithFilename(filename:String)->[AnyObject]?{
         
         let filePath = NSBundle.mainBundle().pathForResource(filename, ofType: nil)
         
         if filePath != nil {
             
-            var dict = NSDictionary(contentsOfFile: filePath!)
-            var  value: AnyObject? = dict!.objectForKey(dict!.allKeys.first!)
+            let dict = NSDictionary(contentsOfFile: filePath!)
+            let  value: AnyObject? = dict!.objectForKey(dict!.allKeys.first!)
             
             if value == nil  {return nil}
             
@@ -119,28 +102,28 @@ extension NSObject {
                 
             }else{
                 
-                println("Value 不是一个字典数组 请使用其他方法")
+                print("Value 不是一个字典数组 请使用其他方法")
                 
             }
             
         }
         
-        println("文件路径不对，可能文件名有误请查证")
+        print("文件路径不对，可能文件名有误请查证")
         
         return nil
         
     }
     
-    ///  通过plist来创建一个模型 @param filename 文件名(仅限于mainBundle中的文件)  @return 模型数组 如果你的模型中有Number Int 8 32 64等 请写成String 预防类型安全
+    ///  通过plist来创建一个模型 @param filename 文件名(仅限于mainBundle中的文件)  @return 模型数组
     
-    class func objectWithFileName(filename:String!)->Self{
+    class func objectWithFileName(filename:String)->Self{
         
         let filePath = NSBundle.mainBundle().pathForResource(filename, ofType: nil)
         
-        var dict = NSDictionary(contentsOfFile: filePath!)
-        var  value: AnyObject? = dict!.objectForKey(dict!.allKeys.first!)
+        let dict = NSDictionary(contentsOfFile: filePath!)
+        let  value: AnyObject? = dict!.objectForKey(dict!.allKeys.first!)
         
-        var objc = self.alloc()
+        var objc = self.init()
         
         if value != nil && value! is [String:AnyObject]{
             
@@ -148,7 +131,7 @@ extension NSObject {
             
         }else{
             
-            println("value 不是一个字典")
+            print("value 不是一个字典")
             
         }
         return objc
