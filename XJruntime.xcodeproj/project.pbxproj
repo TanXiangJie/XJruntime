@@ -171,8 +171,6 @@
 		871C2F311B5E5BFA001D9A09 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftMigration = 0710;
-				LastSwiftUpdateCheck = 0710;
 				LastUpgradeCheck = 0640;
 				ORGANIZATIONNAME = "若水三千";
 				TargetAttributes = {
@@ -431,7 +429,6 @@
 				871C2F5A1B5E5BFB001D9A09 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
 		};
 		871C2F5B1B5E5BFB001D9A09 /* Build configuration list for PBXNativeTarget "XJruntimeTests" */ = {
 			isa = XCConfigurationList;
@@ -440,7 +437,6 @@
 				871C2F5D1B5E5BFB001D9A09 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
