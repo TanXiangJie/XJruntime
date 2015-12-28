@@ -34,10 +34,15 @@ class ViewController: UITableViewController {
         var row=indexPath.row as Int
         var u:StatusResult = array[row] as! StatusResult
         
-        cell.textLabel?.text = u.user.name
-        cell.detailTextLabel?.text = u.user.profile_image_url
+        cell.textLabel?.text = u.user!.name
+        cell.detailTextLabel?.text = u.user!.profile_image_url
         cell.detailTextLabel?.font = UIFont.systemFontOfSize(12)
         cell.textLabel?.font = UIFont.systemFontOfSize(14)
+<<<<<<< HEAD
+        let url: NSURL = NSURL(string: u.user!.profile_image_url!)!
+        let request: NSURLRequest = NSURLRequest(URL: url)
+=======
+>>>>>>> master
         
         return cell
     }
