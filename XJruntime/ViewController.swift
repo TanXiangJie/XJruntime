@@ -36,11 +36,11 @@ class ViewController: UITableViewController {
         let u:StatusResult = array[row] as! StatusResult
         let cell = UITableViewCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier:identify)
         
-        cell.textLabel?.text = u.user.name
-        cell.detailTextLabel?.text = u.user.profile_image_url
+        cell.textLabel?.text = u.user!.name
+        cell.detailTextLabel?.text = u.user!.profile_image_url
         cell.detailTextLabel?.font = UIFont.systemFontOfSize(12)
         cell.textLabel?.font = UIFont.systemFontOfSize(14)
-        let url: NSURL = NSURL(string: u.user.profile_image_url!)!
+        let url: NSURL = NSURL(string: u.user!.profile_image_url!)!
         let request: NSURLRequest = NSURLRequest(URL: url)
         
         NSURLConnection.sendAsynchronousRequest(request, queue: NSOperationQueue.mainQueue(), completionHandler:{
