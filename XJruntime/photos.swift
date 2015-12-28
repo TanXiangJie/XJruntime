@@ -12,8 +12,8 @@ import UIKit
 
 class photos: NSObject {
     
-    var thumbnail_pic = String()
+    var thumbnail_pic : String?
     
-
-
+    
+    
 }
